@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="styles/circles.css" rel="stylesheet">
+        <script type="text/javascript" src="scripts/util/jquery-1.9.1.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="scale chromatic"><a class="link" href="#">Chromatic</a></div>
+            <div class="scale pentatonic"><a class="link" href="#">Pentatonic</a></div>
+        </div>
+        <script type="text/javascript">
+            var div = $('.container');
+            var x = window.innerWidth / 2 - div.width() / 2;
+            var y = window.innerHeight / 2 - div.height() / 2;
+            div.css('left', x).css('top', y);
+
+            var a = $('.link');
+            x = div.width() / 2 - a.width() / 2;
+            y = div.height() / 2 - a.height() / 2;
+            a.css('left', x).css('top', y);
+        </script>
+    </body>
+</html>

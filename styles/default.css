@@ -1,0 +1,19 @@
+body {
+    background: #222;
+    overflow: hidden;
+}
+circle {
+    fill: none;
+}
+
+/* jQuery UI */
+.dialog {
+    text-align: center;
+}
+.dialog .ui-button {
+    display: block;
+    margin: 10px 40px;
+}
+.no-close .ui-dialog-titlebar-close {
+  display: none;
+}

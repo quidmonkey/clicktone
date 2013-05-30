@@ -1,0 +1,11 @@
+Gruntfile.js
+package.json
+node_modules
+.git
+.gitignore
+README.md
+excludes
+.DS_Store
+circles.html
+circles.css
+deploy.json

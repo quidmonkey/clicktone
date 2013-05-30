@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script type="text/javascript" src="d3.v3.min.js"></script>
+    <script type="text/javascript" src="app/helpers.js"></script>
+    <script type="text/javascript" src="app/note.js"></script>
+    <script type="text/javascript" src="app/synth.js"></script>
+    <script type="text/javascript" src="app/tone.js"></script>
+    <style type="text/css">
+        body {
+            background: #222;
+        }   
+        circle {
+            fill: none;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        // constants
+        const OCTAVES = { min: 1, max: 8 };             // played octaves
+        const PARTICLE_WIDTH = { min: 2, max: 100 };    // size of tone circles
+        const PHRASE_INTERVAL = 1000;                   // ms until phrase is complete
+        const RADIUS = { start: 0, stop: 100 };         // size of particles
+        const REPEAT = 3;                               // # times to repeat note
+        const SCALES = {
+            CHROMATIC: ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'],
+            MAJOR_PENTATONIC: ['A', 'C', 'D',' E', 'G']
+        }
+
+        // web audio
+        var context;
+        try {
+            window.AudioContext = window.AudioContext || window.webkitAudioContext;
+            context = new AudioContext();
+        } catch (e) {
+            alert('WebAudio is unsupported by your browser.');
+            throw '*** Missing WebAudio ***';
+        }
+
+        // globals
+        var KEYS = SCALES.MAJOR_PENTATONIC;
+        var phrase = {
+            notes: [],
+            start: null
+        };
+        var phraseTimeout;
+        var synth = new Synth(context);
+        var tones = [];
+
+        // cache tone colors
+        var colors = d3.scale[getCategory()]();
+
+        // randomize our colors!
+        function getCategory () {
+            var x = Math.random() * 3;
+            if (x < 1) {
+                return 'category20';
+            } else if (x < 2) {
+                return 'category20b';
+            } else {
+                return 'category20c';
+            }
+        }
+
+        // init svg
+        var svg = d3.select('body').append('svg:svg')
+            .attr('width', window.innerWidth)
+            .attr('height', window.innerHeight)
+            .style('pointer-events', 'all')
+            .on('mousedown', playTone);
+
+        // start audio loop with request animation frame
+        d3.timer(audioLoop);
+
+        function audioLoop (elapsed) {
+            var repeatTempo = PHRASE_INTERVAL / 1000;
+            for (var i = tones.length; i--;) {
+                var tone = tones[i];
+
+                // this is a bit off since the javascript timer
+                // is not accurate for rhythm, but will do for syncing
+                // the rendering of the circles with the tone
+                if (tone.start + repeatTempo < context.currentTime) {
+                    // play tone!
+                    tone.play.call(tone);
+
+                    // draw circle!
+                    render(tone.x, tone.y, tone.color);
+
+                    // has tone played itself out?
+                    if (++tone.repeat === REPEAT) {
+                        tones.splice(i, 1);
+                    } else {
+                        tone.start = context.currentTime + repeatTempo;
+                    }
+                }
+            }
+        }
+
+        function addToPhrase (key, octave, x, y, color) {
+            if (phrase.notes.length === 0) {
+                phrase.start = context.currentTime;
+                phraseTimeout = setTimeout(stopPhrase, PHRASE_INTERVAL);
+            }
+            phrase.notes.push(
+                new Tone(synth, key, octave, x, y, color)       // plays initial tone
+            );
+        }
+
+        function stopPhrase (tone) {
+            // queue all notes relative to end of phrase
+            var current = context.currentTime;
+            for (var i = 0, len = phrase.notes.length; i < len; i++) {
+                var note = phrase.notes[i];
+                note.start = current + (note.start - phrase.start);
+            }
+
+            // add to audio loop!
+            tones = tones.concat(phrase.notes);
+
+            // start new phrase
+            phrase.notes.length = 0;
+            phrase.start = null;
+        }
+
+        // mouse-up handler
+        function playTone () {
+            var m = d3.mouse(this);
+
+            // audio
+            var keyIndex = m[0].map(0, window.innerWidth, 0, KEYS.length - 1);         // pitch (key) changes along x-axis
+            var key = KEYS[keyIndex];
+            var octave = m[1].map(0, window.innerHeight, OCTAVES.max, OCTAVES.min);    // octave changes along y-axis
+
+            // color
+            var color = colors(~~(Math.random() * 20));
+
+            addToPhrase(key, octave, m[0], m[1], color);
+
+            render(m[0], m[1], color);
+        }
+
+        function render (x, y, color) {
+            var width = y.map(0, window.innerHeight, PARTICLE_WIDTH.min, PARTICLE_WIDTH.max);    // scales with octave along y-axis
+
+            svg.append('svg:circle')
+                .attr('cx', x)
+                .attr('cy', y)
+                .attr('r', RADIUS.start)
+                .style('stroke', color)
+                .style('stroke-opacity', 1)
+                .style('stroke-width', width)
+            .transition()
+                .duration(2000)
+                .ease(Math.sqrt)
+                .attr('r', RADIUS.stop)
+                .style('stroke-opacity', 1e-6)
+                .remove();
+        }
+    </script>
+</body>
+</html>

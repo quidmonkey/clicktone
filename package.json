@@ -1,0 +1,23 @@
+{
+  "name": "ClickTone",
+  "version": "0.0.1",
+  "description": "A Musical Toy",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:quidmonkey/touchtone.git"
+  },
+  "author": "Abraham Walters",
+  "license": "BSD",
+  "gitHead": "eaa5dd00c881adfa1cc1cb7e22091f210b0e2e37",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-requirejs": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-shell": "~0.2.2"
+  },
+  "optimizedFile": "clicktone-optimized"
+}

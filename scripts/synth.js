@@ -22,10 +22,10 @@ define('synth', ['note'], function (Note) {
     var Synth = function (context) {
         this.context = context;
 
-        this.master = this.context.createGainNode();
+        this.master = this.context.createGain();
         this.master.gain.value = MASTER_VOLUME;
 
-        this.delay = this.context.createDelayNode();
+        this.delay = this.context.createDelay();
         this.delay.delayTime.value = 0.25;
         this.delay.connect(this.master);
 

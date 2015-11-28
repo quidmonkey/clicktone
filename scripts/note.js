@@ -33,7 +33,7 @@ define('note', function () {
 
             this.envelope.gain.setValueAtTime(0, now);
             this.envelope.gain.linearRampToValueAtTime(1, attackEnd);
-            this.envelope.gain.setTargetValueAtTime((this.sustain / 1000), attackEnd, decay);
+            this.envelope.gain.setTargetAtTime((this.sustain / 1000), attackEnd, decay);
         },
 
         stop: function (time) {
@@ -43,7 +43,7 @@ define('note', function () {
 
             this.envelope.gain.cancelScheduledValues(time);
             this.envelope.gain.setValueAtTime(this.envelope.gain.value, time);
-            this.envelope.gain.setTargetValueAtTime(0, time, (this.release / 1000));
+            this.envelope.gain.setTargetAtTime(0, time, (this.release / 1000));
 
             this.osc.stop(release);
         }

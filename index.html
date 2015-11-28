@@ -14,29 +14,50 @@
         <!-- <script src="scripts/clicktone.min.js"></script> -->
 
         <script type="text/javascript">
-            $(function () {
-                $('.dialog').dialog({
-                    dialogClass: 'no-close',    // no 'x' button
-                    open: function () {
-                        $('a').blur();          // no button highlight
-                    }
+            function startApp () {
+                require.config({
+                    baseUrl: 'scripts'
                 });
-                $('a').button().click(function (event) {
-                    $('.dialog').remove();
+                require(['main']);
+            }
 
-                    // start app!
-                    require.config({
-                        baseUrl: 'scripts'
+            function displayScaleDialog () {
+                $('.dialog')
+                    .show()
+                    .dialog({
+                        dialogClass: 'no-close',    // no 'x' button
+                        open: function () {
+                            $('a').blur();          // no button highlight
+                        }
                     });
-                    require(['main']);
+
+                $('a').button().click(function (event) {
+                    $('.dialog')
+                        .dialog('destroy')
+                        .hide();
+                    startApp();
                 });
+            }
+
+            $(document).ready(function () {
+                if (window.location.hash === '') {
+                    displayScaleDialog();
+                } else {
+                    $('.dialog').hide();
+                    startApp();
+                }
+            });
+
+            $(document).keypress(function (ev) {
+                displayScaleDialog();
             });
         </script>
     </head>
     <body>
-        <div class='dialog' title="Choose a Scale">
+        <div class="dialog" title="Choose a Scale">
             <a href="#CHROMATIC">Chromatic</a>
-            <a href="#MAJOR_PENTATONIC">Pentatonic</a>
+            <a href="#MAJOR_PENTATONIC">Major Pentatonic</a>
+            <a href="#MINOR_PENTATONIC">Minor Pentatonic</a>
         </div>
     </body>
 </html>

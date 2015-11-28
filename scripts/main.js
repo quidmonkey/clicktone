@@ -14,7 +14,8 @@ define('main', [
     const REPEAT_TEMPO = PHRASE_INTERVAL / 1000;    // phrase interval in secs
     const SCALES = {
         CHROMATIC: ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'],
-        MAJOR_PENTATONIC: ['A', 'C', 'D',' E', 'G']
+        MAJOR_PENTATONIC: ['A', 'C#', 'D',' E', 'F#'],
+        MINOR_PENTATONIC: ['A', 'C', 'D', 'E', 'G']
     };
 
     // web audio

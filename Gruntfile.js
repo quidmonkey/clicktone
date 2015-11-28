@@ -10,6 +10,21 @@ module.exports = function(grunt) {
       '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
       '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
+    connect: {
+      server: {
+        options: {
+          keepalive: true,
+          livereload: true,
+          port: 8000
+        }
+      }
+    },
+    open: {
+      dev: {
+        path: 'http://localhost:8000',
+        app: 'Google Chrome'
+      }
+    },
     // deploy to a remote server
     shell: {
       deploy: {
@@ -40,13 +55,14 @@ module.exports = function(grunt) {
     }
   });
 
-  // These plugins provide necessary tasks.
+  grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-open');
   grunt.loadNpmTasks('grunt-shell');
 
-  // Default task.
-  grunt.registerTask('default', ['requirejs', 'uglify']);
+  grunt.registerTask('default', ['open', 'connect']);
+  grunt.registerTask('build', ['requirejs', 'uglify']);
   grunt.registerTask('require', ['requirejs']);
 
 };

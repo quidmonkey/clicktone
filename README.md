@@ -1,8 +1,8 @@
 ## ClickTone - A Musical Toy
 
-[Play ClickTone!](http://ninjaspankypants.com/clicktone/index.html)
+ClickTone is a musical toy in the vein of Electroplankton. It is made using d3, GruntJS, jQuery UI, RequireJS and Web Audio.
 
-ClickTone is a musical toy in the vein of Electroplankton. It is made using d3, GruntJS, jQuery UI, RequireJS and Web Audio. You will need a recent version of Chrome, Firefox or Safari to run it.
+After cloning the repo, run `npm install` then `grunt` to install the node dependencies, start the server and play ClickTone!
 
 ## Thanks
 

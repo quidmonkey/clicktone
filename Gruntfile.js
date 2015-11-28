@@ -25,7 +25,7 @@ module.exports = function(grunt) {
       },
       dist: {
         src: 'scripts/<%= pkg.optimizedFile %>.js',
-        dest: 'scripts/<%= pkg.name %>.min.js'
+        dest: 'scripts/<%= pkg.name.toLowerCase() %>.min.js'
       }
     },
     requirejs: {

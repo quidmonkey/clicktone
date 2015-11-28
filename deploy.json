@@ -1,0 +1,6 @@
+{
+    "deployDir": "public/clicktone",
+    "deployServer": "www.myserver.com",
+    "deployUser": "test",
+    "excludesFile": "excludes"
+}

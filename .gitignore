@@ -1,3 +1,4 @@
 node_modules
 DS_Store
-deploy.json
+scripts/ClickTone.min.js
+scripts/clicktone-optimized.js
